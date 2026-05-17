@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Nee Doh Claw Machine</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Nee Doh Claw Machine</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Nee Doh Claw Machine</h1>
+<h1 class="title">NEE DOH CLAW MACHINE</h1>
 
-<div id="tokens">Tokens: 5</div>
+<div class="topbar">
+  <div id="tokens">Tokens: 5</div>
+  <button id="checkout">Checkout</button>
+</div>
 
-<div id="game">
+<div id="machine">
 
-  <div id="claw"></div>
+  <div id="clawCable"></div>
 
-  <div class="toy" id="toy1"></div>
-  <div class="toy" id="toy2"></div>
-  <div class="toy" id="toy3"></div>
+  <img id="claw"
+  src="80d04345-33e4-4967-9976-456eccac9b7f.png">
+
+  <div id="pit"></div>
+
+  <div id="prizeHole"></div>
 
 </div>
 
-<button onclick="dropClaw()">DROP CLAW</button>
+<h2>Won Nee Dohs</h2>
+
+<div id="inventory"></div>
 
 <script src="script.js"></script>
 </body>
