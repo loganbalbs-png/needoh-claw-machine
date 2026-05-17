@@ -1,61 +1,110 @@
-let claw = document.getElementById("claw");
-let x = 300;
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(to bottom,#bffcff,#ffffff);
+  overflow:hidden;
+  text-align:center;
+}
 
-let tokens = 5;
-let losses = 0;
+.title{
+  color:#00bcd4;
+  text-shadow:0 0 10px white;
+}
 
-document.addEventListener("keydown", (e) => {
+.topbar{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-bottom:10px;
+}
 
-  if(e.key === "ArrowLeft"){
-    x -= 20;
-  }
+#checkout{
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:#00e5ff;
+  cursor:pointer;
+  font-size:18px;
+}
 
-  if(e.key === "ArrowRight"){
-    x += 20;
-  }
+#machine{
+  width:900px;
+  height:650px;
+  margin:auto;
+  position:relative;
+  overflow:hidden;
+  border:10px solid cyan;
+  border-radius:30px;
+  background:
+  linear-gradient(to bottom,
+  rgba(255,255,255,0.9),
+  rgba(180,255,255,0.6));
+}
 
-  claw.style.left = x + "px";
+#clawCable{
+  width:4px;
+  height:120px;
+  background:black;
+  position:absolute;
+  left:450px;
+  top:0;
+  z-index:5;
+}
 
-});
+#claw{
+  width:120px;
+  position:absolute;
+  left:390px;
+  top:90px;
+  z-index:10;
+  transition:
+  left 0.2s ease,
+  top 1s ease,
+  transform 0.2s ease;
+}
 
-function dropClaw(){
+.neeDoh{
+  width:90px;
+  position:absolute;
+  bottom:20px;
+  user-select:none;
+  transition:transform 0.2s;
+}
 
-  if(tokens <= 0){
-    alert("No more tokens!");
-    return;
-  }
+.neeDoh:hover{
+  transform:scale(1.1);
+}
 
-  tokens--;
+#prizeHole{
+  width:180px;
+  height:40px;
+  background:black;
+  position:absolute;
+  bottom:0;
+  right:40px;
+  border-radius:50%;
+}
 
-  document.getElementById("tokens").innerText =
-    "Tokens: " + tokens;
+#inventory{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  padding:20px;
+}
 
-  claw.style.top = "350px";
+.inventoryItem{
+  width:100px;
+  cursor:pointer;
+}
 
-  setTimeout(() => {
-
-    claw.style.top = "0px";
-
-    let winChance = Math.random();
-
-    if(losses >= 2){
-      winChance = 1;
-    }
-
-    if(winChance > 0.5){
-
-      alert("YOU WON A NEE DOH!");
-
-      losses = 0;
-
-    } else {
-
-      alert("Missed!");
-
-      losses++;
-
-    }
-
-  }, 1000);
-
+#pit{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:120px;
+  background:
+  linear-gradient(to top,
+  rgba(0,0,0,0.2),
+  transparent);
 }
