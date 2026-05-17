@@ -1,47 +1,174 @@
-body {
-  background: linear-gradient(to bottom, #bffcff, #ffffff);
-  font-family: Arial;
-  text-align: center;
+const machine = document.getElementById("machine");
+const claw = document.getElementById("claw");
+const cable = document.getElementById("clawCable");
+const inventory = document.getElementById("inventory");
+
+let clawX = 390;
+let tokens = 5;
+let dropping = false;
+let losses = 0;
+
+const prizes = [];
+
+const images = [
+"743f907e-3b37-4837-8ab8-acd6850fd908.png",
+"b31ddfef-6bb7-4960-8ece-ab780be1f045.png"
+];
+
+function spawnNeeDohs(){
+
+  for(let i=0;i<18;i++){
+
+    const toy = document.createElement("img");
+
+    toy.src =
+    images[Math.floor(Math.random()*images.length)];
+
+    toy.className = "neeDoh";
+
+    toy.style.left =
+    Math.random()*780 + "px";
+
+    toy.style.bottom =
+    Math.random()*120 + "px";
+
+    toy.dataset.caught = "false";
+
+    machine.appendChild(toy);
+
+    prizes.push(toy);
+  }
 }
 
-#game {
-  width: 700px;
-  height: 500px;
-  border: 8px solid cyan;
-  margin: auto;
-  position: relative;
-  overflow: hidden;
-  background: rgba(255,255,255,0.5);
+spawnNeeDohs();
+
+document.addEventListener("keydown",(e)=>{
+
+  if(dropping) return;
+
+  if(e.key==="ArrowLeft"){
+    clawX -= 25;
+    claw.style.transform = "rotate(-8deg)";
+  }
+
+  if(e.key==="ArrowRight"){
+    clawX += 25;
+    claw.style.transform = "rotate(8deg)";
+  }
+
+  clawX = Math.max(0,Math.min(780,clawX));
+
+  claw.style.left = clawX + "px";
+
+  cable.style.left = (clawX+58)+"px";
+
+  setTimeout(()=>{
+    claw.style.transform="rotate(0deg)";
+  },150);
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+  if(e.code==="Space"){
+    dropClaw();
+  }
+
+});
+
+function dropClaw(){
+
+  if(tokens<=0){
+    alert("No tokens left!");
+    return;
+  }
+
+  if(dropping) return;
+
+  dropping = true;
+
+  tokens--;
+
+  document.getElementById("tokens")
+  .innerText = "Tokens: "+tokens;
+
+  claw.style.top = "420px";
+
+  let won = false;
+
+  setTimeout(()=>{
+
+    prizes.forEach((toy)=>{
+
+      const toyRect =
+      toy.getBoundingClientRect();
+
+      const clawRect =
+      claw.getBoundingClientRect();
+
+      if(
+        Math.abs(
+        toyRect.left - clawRect.left
+        ) < 70
+      ){
+
+        if(Math.random()>0.5 || losses>=2){
+
+          won = true;
+
+          losses = 0;
+
+          toy.remove();
+
+          addToInventory(toy.src);
+
+        }
+
+      }
+
+    });
+
+    if(!won){
+      losses++;
+    }
+
+    claw.style.top = "90px";
+
+    setTimeout(()=>{
+      dropping = false;
+    },1000);
+
+  },1000);
+
 }
 
-#claw {
-  width: 60px;
-  height: 60px;
-  background: silver;
-  position: absolute;
-  top: 0;
-  left: 300px;
+function addToInventory(src){
+
+  const img = document.createElement("img");
+
+  img.src = src;
+
+  img.className = "inventoryItem";
+
+  img.onclick = ()=>{
+
+    alert("Nee Doh ready for checkout!");
+
+  };
+
+  inventory.appendChild(img);
+
 }
 
-.toy {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 20px;
-}
+document.getElementById("checkout")
+.onclick = ()=>{
 
-#toy1 {
-  background: hotpink;
-  left: 100px;
-}
+  if(inventory.children.length===0){
+    alert("You have no Nee Dohs!");
+    return;
+  }
 
-#toy2 {
-  background: lime;
-  left: 300px;
-}
+  window.location.href =
+  "https://buy.stripe.com/";
 
-#toy3 {
-  background: orange;
-  left: 500px;
-}
+};
